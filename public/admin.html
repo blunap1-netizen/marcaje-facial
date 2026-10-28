@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#22332f">
+  <title>Administración — Marcaje</title>
+  <link rel="icon" href="/icono.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/css/comun.css">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+
+  <!-- ===== Ingreso ===== -->
+  <section id="vista-login" class="login" hidden>
+    <form id="form-login" class="login-caja">
+      <img src="/icono.svg" alt="" width="56" height="56">
+      <h1>Administración del marcaje</h1>
+      <label>Contraseña
+        <input type="password" name="clave" autocomplete="current-password" required autofocus>
+      </label>
+      <p id="login-error" class="error-texto" role="alert"></p>
+      <button class="btn primario" type="submit">Entrar</button>
+      <a href="/">Ir a la pantalla de marcaje</a>
+    </form>
+  </section>
+
+  <!-- ===== Aplicación ===== -->
+  <div id="vista-app" hidden>
+    <header class="barra">
+      <div class="barra-marca"><img src="/icono.svg" alt="" width="30" height="30"><span id="nombre-empresa">Marcaje</span></div>
+      <nav class="pestanas" aria-label="Secciones">
+        <button data-tab="hoy" class="activa">Hoy</button>
+        <button data-tab="empleados">Empleados</button>
+        <button data-tab="marcajes">Marcajes</button>
+        <button data-tab="reportes">Reportes por correo</button>
+        <button data-tab="ajustes">Ajustes</button>
+      </nav>
+      <div class="barra-acciones">
+        <a class="btn fantasma" href="/" target="_blank" rel="noopener">Abrir pantalla de marcaje</a>
+        <button id="btn-salir" class="btn fantasma">Salir</button>
+      </div>
+    </header>
+
+    <main class="contenido">
+
+      <!-- HOY -->
+      <section id="tab-hoy" class="tab">
+        <h1>Hoy <small id="hoy-fecha"></small></h1>
+        <dl class="cifras">
+          <div><dt>Marcajes de hoy</dt><dd id="c-marcajes">0</dd></div>
+          <div><dt>En turno ahora</dt><dd id="c-turno">0</dd></div>
+          <div><dt>Empleados activos</dt><dd id="c-activos">0</dd></div>
+          <div><dt>Con rostro registrado</dt><dd id="c-rostro">0</dd></div>
+        </dl>
+        <div class="dos-col">
+          <div>
+            <h2>En turno ahora</h2>
+            <ul id="lista-turno" class="lista-simple"></ul>
+          </div>
+          <div>
+            <h2>Últimos marcajes</h2>
+            <ul id="lista-ultimos" class="lista-simple"></ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- EMPLEADOS -->
+      <section id="tab-empleados" class="tab" hidden>
+        <h1>Empleados</h1>
+        <form id="form-empleado" class="fila-form">
+          <label>Código<input name="codigo" required maxlength="20" placeholder="E001"></label>
+          <label class="ancho">Nombre completo<input name="nombre" required maxlength="80" placeholder="Nombre y apellido"></label>
+          <label>Puesto<input name="puesto" maxlength="60" placeholder="Opcional"></label>
+          <button class="btn primario" type="submit">Agregar empleado</button>
+        </form>
+        <p class="ayuda">Después de agregarlo, toca <b>Registrar rostro</b> con la persona frente a la cámara de este dispositivo.</p>
+        <div class="tabla-envoltura">
+          <table class="tabla">
+            <thead><tr><th>Código</th><th>Nombre</th><th>Puesto</th><th>Rostro</th><th>Estado</th><th></th></tr></thead>
+            <tbody id="tbody-empleados"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- MARCAJES -->
+      <section id="tab-marcajes" class="tab" hidden>
+        <h1>Marcajes</h1>
+        <form id="form-filtro" class="fila-form">
+          <label>Desde<input type="date" name="desde" required></label>
+          <label>Hasta<input type="date" name="hasta" required></label>
+          <label class="ancho">Empleado<select name="empleado"><option value="">Todos</option></select></label>
+          <button class="btn" type="submit">Buscar</button>
+          <button class="btn primario" type="button" id="btn-excel">Descargar Excel</button>
+        </form>
+        <details class="plegable">
+          <summary>Agregar marcaje manual (para corregir un olvido)</summary>
+          <form id="form-manual" class="fila-form">
+            <label class="ancho">Empleado<select name="empleadoId" required></select></label>
+            <label>Tipo<select name="tipo"><option value="ENTRADA">Entrada</option><option value="SALIDA">Salida</option></select></label>
+            <label>Fecha<input type="date" name="fecha" required></label>
+            <label>Hora<input type="time" name="hora" required></label>
+            <label class="ancho">Motivo<input name="motivo" maxlength="50" placeholder="Ej.: olvidó marcar salida"></label>
+            <button class="btn primario" type="submit">Guardar marcaje</button>
+          </form>
+        </details>
+        <p id="marcajes-total" class="ayuda"></p>
+        <div class="tabla-envoltura">
+          <table class="tabla">
+            <thead><tr><th>Fecha</th><th>Hora</th><th>Empleado</th><th>Tipo</th><th>Coincidencia</th><th>Dispositivo</th><th></th></tr></thead>
+            <tbody id="tbody-marcajes"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- REPORTES -->
+      <section id="tab-reportes" class="tab" hidden>
+        <h1>Reportes por correo</h1>
+        <p class="ayuda texto-medida">El sistema genera un Excel con tres hojas (asistencia por jornada, resumen por empleado y detalle de marcajes) y lo envía solo, a la hora que elijas. Para que funcione, la computadora del servidor debe estar encendida y el correo de salida configurado en <a href="#" data-ir="ajustes">Ajustes</a>.</p>
+        <p id="aviso-smtp" class="aviso" hidden>Falta configurar el correo de salida. Ve a <a href="#" data-ir="ajustes">Ajustes → Correo de salida</a>.</p>
+
+        <div class="tabla-envoltura">
+          <table class="tabla">
+            <thead><tr><th>Activo</th><th>Nombre</th><th>Cuándo se envía</th><th>Para</th><th>Último envío</th><th></th></tr></thead>
+            <tbody id="tbody-programaciones"></tbody>
+          </table>
+        </div>
+
+        <h2 id="titulo-form-prog">Nueva programación</h2>
+        <form id="form-prog" class="form-columna texto-medida">
+          <input type="hidden" name="id">
+          <label>Nombre<input name="nombre" maxlength="60" placeholder="Ej.: Reporte diario para gerencia" required></label>
+          <fieldset class="opciones">
+            <legend>Frecuencia</legend>
+            <label><input type="radio" name="frecuencia" value="DIARIO" checked> Diario</label>
+            <label><input type="radio" name="frecuencia" value="SEMANAL"> Semanal</label>
+            <label><input type="radio" name="frecuencia" value="MENSUAL"> Mensual</label>
+          </fieldset>
+          <p id="explica-frecuencia" class="ayuda"></p>
+          <div class="fila-form">
+            <label>Hora de envío<input type="time" name="hora" value="18:00" required></label>
+            <label id="campo-dia">Día de la semana
+              <select name="dia_semana">
+                <option value="1">Lunes</option><option value="2">Martes</option><option value="3">Miércoles</option>
+                <option value="4">Jueves</option><option value="5">Viernes</option><option value="6" selected>Sábado</option><option value="0">Domingo</option>
+              </select>
+            </label>
+          </div>
+          <label>Enviar a (separa varios correos con coma)
+            <textarea name="destinatarios" rows="2" required placeholder="gerencia@empresa.com, rrhh@empresa.com"></textarea>
+          </label>
+          <div class="acciones">
+            <button class="btn primario" type="submit" id="btn-guardar-prog">Guardar programación</button>
+            <button class="btn" type="button" id="btn-cancelar-prog" hidden>Cancelar edición</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- AJUSTES -->
+      <section id="tab-ajustes" class="tab" hidden>
+        <h1>Ajustes</h1>
+        <form id="form-ajustes" class="form-columna texto-medida">
+          <fieldset>
+            <legend>Empresa</legend>
+            <label>Nombre que aparece en la pantalla y en los reportes<input name="empresa" maxlength="80"></label>
+          </fieldset>
+
+          <fieldset>
+            <legend>Reconocimiento facial</legend>
+            <label>Exigencia para reconocer un rostro: <output id="out-umbral"></output>
+              <input type="range" name="umbral_similitud" min="0.40" max="0.80" step="0.01">
+              <span class="ayuda">Más alto = más estricto (menos errores, pero puede pedir intentarlo de nuevo). Recomendado: 0.50 (valor sugerido por la librería).</span>
+            </label>
+            <label class="check"><input type="checkbox" name="anti_foto"> Verificar que sea una persona real (bloquea fotos y pantallas)</label>
+            <label>Exigencia de la verificación anti-foto: <output id="out-antifoto"></output>
+              <input type="range" name="umbral_anti_foto" min="0.20" max="0.90" step="0.05">
+            </label>
+            <label class="check"><input type="checkbox" name="parpadeo"> Pedir que la persona parpadee antes de marcar</label>
+            <label>Tolerancia al girar la cabeza: <output id="out-giro"></output>
+              <input type="range" name="giro_max" min="0.15" max="0.45" step="0.01">
+              <span class="ayuda">Más bajo = la persona debe mirar más de frente (mejor precisión). Recomendado: 0.25.</span>
+            </label>
+            <label>Tamaño mínimo del rostro (píxeles)
+              <input type="number" name="tamano_min_rostro" min="60" max="600" step="10">
+              <span class="ayuda">Si la persona tiene que acercarse demasiado, baja este número.</span>
+            </label>
+          </fieldset>
+
+          <fieldset>
+            <legend>Reglas de marcaje</legend>
+            <label>Horas máximas de un turno
+              <input type="number" name="horas_max_turno" min="4" max="36">
+              <span class="ayuda">Si alguien marca entrada y no marca salida en este tiempo, la jornada queda como "Sin salida" y puede volver a marcar entrada.</span>
+            </label>
+            <label>Minutos de espera entre dos marcajes
+              <input type="number" name="minutos_entre_marcajes" min="0" max="60">
+            </label>
+          </fieldset>
+
+          <fieldset>
+            <legend>Correo de salida</legend>
+            <p class="ayuda">Con Gmail: activa la verificación en dos pasos en tu cuenta de Google, crea una <b>contraseña de aplicación</b> y pégala abajo (no uses tu contraseña normal).</p>
+            <div class="acciones"><button class="btn" type="button" id="btn-gmail">Llenar datos de Gmail</button></div>
+            <div class="fila-form">
+              <label class="ancho">Servidor SMTP<input name="smtp_host" placeholder="smtp.gmail.com"></label>
+              <label>Puerto<input type="number" name="smtp_puerto" min="1" max="65535"></label>
+            </div>
+            <label class="check"><input type="checkbox" name="smtp_seguro"> Conexión segura SSL (puerto 465)</label>
+            <label>Correo que envía (usuario)<input type="email" name="smtp_usuario" autocomplete="off" placeholder="reportes@gmail.com"></label>
+            <label>Contraseña de aplicación<input type="password" name="smtp_clave" autocomplete="new-password"></label>
+            <label>Nombre del remitente (opcional)<input name="smtp_remitente" placeholder='Asistencia &lt;reportes@gmail.com&gt;'></label>
+          </fieldset>
+
+          <div class="acciones"><button class="btn primario" type="submit">Guardar ajustes</button></div>
+        </form>
+
+        <form id="form-prueba" class="fila-form texto-medida prueba-correo">
+          <label class="ancho">Enviar un correo de prueba a<input type="email" name="para" required placeholder="tu@correo.com"></label>
+          <button class="btn" type="submit">Enviar prueba</button>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <!-- ===== Registro de rostro ===== -->
+  <dialog id="dlg-rostro" class="dialogo dialogo-rostro">
+    <h2>Registrar rostro de <span id="rostro-nombre"></span></h2>
+    <div class="visor-registro">
+      <video id="rostro-video" autoplay muted playsinline></video>
+      <div class="ovalo"></div>
+    </div>
+    <ol class="perforaciones" id="perforaciones" aria-label="Muestras tomadas">
+      <li></li><li></li><li></li><li></li><li></li>
+    </ol>
+    <p id="rostro-mensaje" class="rostro-mensaje" role="status" aria-live="polite"></p>
+    <div class="acciones">
+      <button class="btn" type="button" id="btn-rostro-cerrar">Cancelar</button>
+      <button class="btn primario" type="button" id="btn-rostro-repetir" hidden>Tomar de nuevo</button>
+    </div>
+  </dialog>
+
+  <!-- ===== Editar empleado ===== -->
+  <dialog id="dlg-editar" class="dialogo">
+    <form id="form-editar" method="dialog" class="form-columna">
+      <h2>Editar empleado</h2>
+      <input type="hidden" name="id">
+      <label>Código<input name="codigo" required maxlength="20"></label>
+      <label>Nombre completo<input name="nombre" required maxlength="80"></label>
+      <label>Puesto<input name="puesto" maxlength="60"></label>
+      <div class="acciones">
+        <button class="btn" type="button" id="btn-editar-cancelar">Cancelar</button>
+        <button class="btn primario" type="submit" value="guardar">Guardar cambios</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="aviso" class="toast" role="status" aria-live="polite" hidden></div>
+
+  <script type="module" src="/js/admin.js"></script>
+</body>
+</html>

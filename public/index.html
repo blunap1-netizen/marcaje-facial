@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#22332f">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Marcaje de asistencia</title>
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="/icono.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/css/comun.css">
+  <link rel="stylesheet" href="/css/kiosco.css">
+</head>
+<body>
+  <main class="reloj">
+    <header class="cabecera">
+      <span id="empresa" class="empresa">Marcaje</span>
+      <span id="fecha" class="fecha"></span>
+    </header>
+
+    <div class="hora-bloque" aria-label="Hora actual">
+      <time id="hora" class="hora">--:--</time><span id="segundos" class="segundos">--</span><span id="ampm" class="ampm"></span>
+    </div>
+
+    <section class="visor" aria-label="Cámara">
+      <video id="video" autoplay muted playsinline></video>
+      <div id="marco" class="marco" data-estado="espera"></div>
+    </section>
+
+    <section class="panel">
+      <p id="mensaje" class="mensaje" role="status" aria-live="polite">Cargando el reconocimiento facial…</p>
+      <ul class="pasos" aria-label="Verificación">
+        <li id="paso-frente">Rostro de frente</li>
+        <li id="paso-real">Persona real</li>
+        <li id="paso-parpadeo">Parpadeo</li>
+      </ul>
+      <div class="botones">
+        <button id="btn-entrada" class="btn-marca entrada" disabled>
+          <span class="etiqueta">Entrada</span><small id="motivo-entrada"></small>
+        </button>
+        <button id="btn-salida" class="btn-marca salida" disabled>
+          <span class="etiqueta">Salida</span><small id="motivo-salida"></small>
+        </button>
+      </div>
+      <button id="btn-no-soy" class="no-soy" hidden>No soy yo</button>
+    </section>
+
+    <footer class="pie">
+      <span id="dispositivo"></span>
+      <a href="/admin">Administración</a>
+    </footer>
+  </main>
+
+  <!-- Tarjeta que aparece al marcar -->
+  <div id="capa-tarjeta" class="capa-tarjeta" hidden>
+    <article class="tarjeta" aria-live="assertive">
+      <header>
+        <span>Tarjeta de asistencia</span>
+        <span id="t-fecha"></span>
+      </header>
+      <h2 id="t-nombre"></h2>
+      <p id="t-codigo" class="t-codigo"></p>
+      <div id="t-sello" class="sello">
+        <span id="t-tipo"></span>
+        <strong id="t-hora"></strong>
+      </div>
+      <p id="t-mensaje" class="t-mensaje"></p>
+    </article>
+  </div>
+
+  <script type="module" src="/js/kiosco.js"></script>
+</body>
+</html>

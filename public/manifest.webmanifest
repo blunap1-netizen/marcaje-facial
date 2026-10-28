@@ -1,0 +1,11 @@
+{
+  "name": "Marcaje de asistencia",
+  "short_name": "Marcaje",
+  "start_url": "/",
+  "display": "fullscreen",
+  "orientation": "any",
+  "background_color": "#22332f",
+  "theme_color": "#22332f",
+  "lang": "es",
+  "icons": [{ "src": "/icono.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}

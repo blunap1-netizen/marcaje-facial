@@ -1,0 +1,56 @@
+/* ============================================================
+   Estilo base — inspirado en los relojes marcadores de tarjeta:
+   esmalte verde-gris del aparato, tarjeta manila y tinta roja del sello.
+   ============================================================ */
+
+@font-face {
+  font-family: 'Big Shoulders Display';
+  src: url('/fuentes/big-shoulders-display/files/big-shoulders-display-latin-600-normal.woff2') format('woff2');
+  font-weight: 600; font-display: swap;
+}
+@font-face {
+  font-family: 'Big Shoulders Display';
+  src: url('/fuentes/big-shoulders-display/files/big-shoulders-display-latin-800-normal.woff2') format('woff2');
+  font-weight: 800; font-display: swap;
+}
+@font-face {
+  font-family: 'Atkinson Hyperlegible';
+  src: url('/fuentes/atkinson-hyperlegible/files/atkinson-hyperlegible-latin-400-normal.woff2') format('woff2');
+  font-weight: 400; font-display: swap;
+}
+@font-face {
+  font-family: 'Atkinson Hyperlegible';
+  src: url('/fuentes/atkinson-hyperlegible/files/atkinson-hyperlegible-latin-700-normal.woff2') format('woff2');
+  font-weight: 700; font-display: swap;
+}
+
+:root {
+  --esmalte: #22332f;        /* cuerpo del reloj marcador */
+  --esmalte-2: #2d433d;
+  --esmalte-3: #3c5850;
+  --tarjeta: #ece2c6;        /* tarjeta de asistencia (manila) */
+  --tarjeta-linea: #c9b98f;
+  --tinta: #1d2a47;          /* tinta azul de la tarjeta */
+  --sello: #b8322a;          /* tinta roja del sello */
+  --entrada: #35b27a;
+  --entrada-osc: #1f7a51;
+  --salida: #f0a43a;
+  --salida-osc: #a8660f;
+  --claro: #f2f5f1;
+  --gris: #9db1aa;
+  --fuente-titulo: 'Big Shoulders Display', 'Arial Narrow', 'Roboto Condensed', sans-serif;
+  --fuente: 'Atkinson Hyperlegible', 'Segoe UI', Roboto, Arial, sans-serif;
+  --radio: 14px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; }
+body { font-family: var(--fuente); font-size: 16px; line-height: 1.45; -webkit-font-smoothing: antialiased; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 3px solid var(--salida); outline-offset: 2px; }
+[hidden] { display: none !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}

@@ -1,0 +1,23 @@
+# Publica el sistema en Netlify cada vez que se suben cambios a la rama main.
+# Netlify recibe el código y lo construye (npm install + npm run preparar + funciones).
+name: Publicar en Netlify
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Subir a Netlify
+        env:
+          NETLIFY_SITE_ID: 3e59f3b0-42b5-4392-8543-087ec771eeac
+          NETLIFY_PROXY: ${{ secrets.NETLIFY_PROXY }}
+        run: npx -y @netlify/mcp@latest --site-id "$NETLIFY_SITE_ID" --proxy-path "$NETLIFY_PROXY"
