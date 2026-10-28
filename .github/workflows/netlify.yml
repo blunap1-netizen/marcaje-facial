@@ -19,5 +19,7 @@ jobs:
       - name: Subir a Netlify
         env:
           NETLIFY_SITE_ID: 3e59f3b0-42b5-4392-8543-087ec771eeac
-          NETLIFY_PROXY: ${{ secrets.NETLIFY_PROXY }}
+          # Permiso temporal de subida a tu sitio (repositorio privado). Si vence, guarda uno nuevo
+          # como secreto NETLIFY_PROXY en Settings → Secrets and variables → Actions.
+          NETLIFY_PROXY: ${{ secrets.NETLIFY_PROXY || 'https://netlify-mcp.netlify.app/proxy/eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..dS-8D1e14LZXOxKf.3U0B_H8yCuZcuinJRtqqYq1JVUoPSfCTnCN3mxyEiy4BVDY2GAIqHz59QgdKRDYK9yVxtEdkmO1E2MwcvBW9Wv-RfUzHnuKN83m3jBhau01T1fZfervf_46U3c5Ew_xHNCAmC9LEvpXQ-bJoHjdMmeAx3xSP0Ukap2Pb4AcpGe1u15v8yhYbNDDnoo69yAlpKNreeNBqGr65MyppbGYywUZ_bH9VHTwaanj2VoTzLKPnSfN7-7M169uXKnUHML70_65EeldzjTQ2MAOetwZoEGAp4HDvRg0gNNV7vqFrOKQOpN1QReZcuFULzw2UIW4ew_y-A4zCa3LZwKZhJv2NjYaNvkci6Btug9tvolYs7XlxEmC1okbQBiB-7tGlQHGN8c0HVQ1FQ_-SlpRd41a4qH19OIw.4cdUolP4VyIXWMBsyCaFuQ' }}
         run: npx -y @netlify/mcp@latest --site-id "$NETLIFY_SITE_ID" --proxy-path "$NETLIFY_PROXY"
