@@ -1,0 +1,24 @@
+/ -> 200 3203B text/html; charset=UTF-8
+/admin -> 200 14266B text/html; charset=UTF-8
+/css/kiosco.css -> 200 7388B text/css; charset=UTF-8
+/js/kiosco.js -> 200 12833B application/javascript; charset=UTF-8
+/human/dist/human.esm.js -> 200 2067875B application/javascript; charset=UTF-8
+/human/models/faceres.json -> 200 71432B application/json
+/human/models/faceres.bin -> 200 6978814B application/octet-stream
+/human/models/blazeface.json -> 200 79038B application/json
+/human/models/facemesh.bin -> 200 1477958B application/octet-stream
+/human/models/iris.json -> 200 122025B application/json
+/human/models/antispoof.json -> 200 8713B application/json
+/human/models/liveness.bin -> 200 592976B application/octet-stream
+/fuentes/big-shoulders-display/files/big-shoulders-display-latin-800-normal.woff2 -> 200 14556B font/woff2
+/api/hora -> 200 34B application/json; charset=utf-8
+/api/kiosco/config -> 200 209B application/json; charset=utf-8
+config: {"empresa":"Mi Empresa","antiFoto":true,"umbralAntiFoto":0.5,"parpadeo":true,"tamanoMinRostro":150,"giroMax":0.25,"hayRostros":false,"zonaHoraria":"America/Guatemala","horaServidor":"2026-10-28T04:48:12.308Z"}
+login malo: 401
+login bueno: cookie sesion_admin=...
+ajustes PUT 1: {"ok":true}
+ajustes PUT 2: {"ok":true}
+ajustes GET: {"empresa":"Mi Empresa","umbral_similitud":"0.50","anti_foto":"1","umbral_anti_foto":"0.5","parpadeo":"1","tamano_min_rostro":"150","giro_max":"0.25","horas_max_turno":"16","minutos_entre_marcajes":"1","smtp_host":"","smtp_puerto":"465","smtp_seguro":"1","smtp_usuario":"","smtp_remitente":"","smtp_c
+hoy: {"empleadosActivos":0,"conRostro":0,"marcajesHoy":0,"enTurno":[],"ultimos":[]}
+excel: 200 9084B application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+hora servidor: {"iso":"2026-10-28T04:48:14.847Z"}
