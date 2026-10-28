@@ -1,0 +1,36 @@
+# Verificación del sitio publicado (se ejecuta solo en la rama "verificar")
+name: Verificar sitio
+on:
+  push:
+    branches: [verificar]
+permissions:
+  contents: write
+jobs:
+  verificar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Revisar páginas, librería facial y API
+        run: |
+          B=https://marcaje-facial-luna.netlify.app
+          {
+          for u in / /admin /css/kiosco.css /js/kiosco.js /human/dist/human.esm.js /human/models/faceres.json /human/models/faceres.bin /human/models/blazeface.json /human/models/facemesh.bin /human/models/iris.json /human/models/antispoof.json /human/models/liveness.bin /fuentes/big-shoulders-display/files/big-shoulders-display-latin-800-normal.woff2 /api/hora /api/kiosco/config; do
+            echo "$u -> $(curl -s -o /dev/null -w '%{http_code} %{size_download}B %{content_type}' $B$u)"
+          done
+          echo "config: $(curl -s $B/api/kiosco/config)"
+          echo "login malo: $(curl -s -o /dev/null -w '%{http_code}' -X POST -H 'Content-Type: application/json' -d '{"clave":"x"}' $B/api/admin/login)"
+          C=$(curl -s -D - -o /dev/null -X POST -H 'Content-Type: application/json' -d '{"clave":"Luna2006"}' $B/api/admin/login | grep -i '^set-cookie' | sed 's/^[Ss]et-[Cc]ookie: //; s/;.*//')
+          echo "login bueno: cookie ${C:0:13}..."
+          echo "ajustes PUT 1: $(curl -s -X PUT -H 'Content-Type: application/json' -H "Cookie: $C" -d '{"empresa":"Mi Empresa"}' $B/api/admin/ajustes)"
+          echo "ajustes PUT 2: $(curl -s -X PUT -H 'Content-Type: application/json' -H "Cookie: $C" -d '{"empresa":"Mi Empresa"}' $B/api/admin/ajustes)"
+          echo "ajustes GET: $(curl -s -H "Cookie: $C" $B/api/admin/ajustes | head -c 300)"
+          echo "hoy: $(curl -s -H "Cookie: $C" $B/api/admin/hoy)"
+          echo "excel: $(curl -s -o /dev/null -w '%{http_code} %{size_download}B %{content_type}' -H "Cookie: $C" $B/api/admin/reporte.xlsx)"
+          echo "hora servidor: $(curl -s $B/api/hora)"
+          } > resultado.txt 2>&1
+          cat resultado.txt
+      - name: Guardar resultado
+        run: |
+          git init -q r && cd r && cp ../resultado.txt . 
+          git config user.name verificador && git config user.email verificador@users.noreply.github.com
+          git checkout -q -b verificar-resultado && git add resultado.txt && git commit -q -m "Resultado verificación"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" verificar-resultado
